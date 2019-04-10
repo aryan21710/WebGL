@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>First Scene</title>
+    <script src='three.min.js'></script>
+</head>
+
+<body>
+
+    <script>
+
+        let scene,camera,renderer,cube;
+        let add=0.1;
+
+        let createCube=()=>{
+            let geometry= new THREE.BoxGeometry(1,1,1);
+            let material = new THREE.MeshBasicMaterial({color: ('rgb(30,90,30)')});
+            cube= new THREE.Mesh(geometry, material);
+            scene.add(cube);
+        }
+
+        const init=()=>{
+            scene=new THREE.Scene();
+            scene.background= new THREE.Color("rgb(100,100,100)");
+
+            camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 1, 1000);
+            camera.position.z=7;
+
+            let axes= new THREE.AxesHelper(5)
+            scene.add(axes);
+
+            createCube();
+
+            renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            document.body.appendChild(renderer.domElement);
+        }
+
+        let mainLoop=()=>{
+                cube.position.x=0;
+                cube.rotation.y-=add;
+
+                if (cube.rotation.y <= -100 || cube.rotation.y >= 100) {
+                    (add*=-1);
+                    console.log(add+':'+cube.rotation.y);
+                }
+                renderer.render(scene,camera);
+                requestAnimationFrame(mainLoop);
+        }
+
+        init();
+        mainLoop();
+    </script>
+</body>
+
+</html>
